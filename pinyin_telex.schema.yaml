@@ -1,0 +1,55 @@
+# Rime schema
+# vim: set sw=2 sts=2 et:
+# encoding: utf-8
+
+schema:
+  schema_id: pinyin_telex
+  name: "拼音-TELEX"
+  version: "2024.05.22"
+  author:
+    - T.C.Liú <zarathustra1999@163.com>
+  description: 拼音输入方案，使用Telex方式标注声调。
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ 拼音, 西文 ]
+
+engine:
+  processors:
+    - ascii_composer
+    - speller
+    - punctuator  # 先於 editor 才會使空格作符號上屏
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - table_translator
+
+menu:
+  alternative_select_keys: "123456789"
+
+speller:
+  alphabet: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`'
+  delimiter: ''
+  auto_select: true
+  algebra:
+
+translator:
+  dictionary: pinyin_telex
+  enable_user_dict: false
+  enable_sentence: true
+  comment_format:
+    - xform/^~(.*)$/$1/
+
+punctuator:  # 只須定義空格一個符號
+  use_space: true
+  half_shape: &punct
+#    ' ' : { commit: ' ' }
+  full_shape: *punct
